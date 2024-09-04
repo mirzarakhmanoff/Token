@@ -46,6 +46,7 @@ const Login = () => {
           <Form.Item
             label="Username"
             name="username"
+            initialValue={"mirzarakhmanoff"}
             rules={[
               {
                 required: true,
@@ -59,6 +60,7 @@ const Login = () => {
           <Form.Item
             label="Password"
             name="password"
+            initialValue={"12345678"}
             rules={[
               {
                 required: true,
