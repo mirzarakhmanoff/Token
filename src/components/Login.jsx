@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import axios from "../api";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,10 +9,12 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let token = useSelector((state) => state.token);
+  const [loading, setLoading] = useState(false);
   console.log(token);
   const [show, setShow] = useState(false);
 
   const onFinish = (values) => {
+    setLoading(true);
     axios
       .post("/admins/sign-in", values)
       .then((res) => {
@@ -20,7 +22,8 @@ const Login = () => {
         dispatch({ type: "LOGIN", payload: res.data.payload.token });
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -79,6 +82,7 @@ const Login = () => {
             <Button
               type="primary"
               htmlType="submit"
+              loading={loading}
               className="w-full py-2 mb-4"
             >
               Submit
@@ -99,4 +103,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default memo(Login);

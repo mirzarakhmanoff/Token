@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/Header";
 import { FaHeart } from "react-icons/fa";
@@ -44,4 +44,4 @@ const Wishlist = () => {
   );
 };
 
-export default Wishlist;
+export default memo(Wishlist);

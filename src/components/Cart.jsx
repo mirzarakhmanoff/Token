@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { FaTrash } from "react-icons/fa";
 import Header from "./Header";
 import { useDispatch, useSelector } from "react-redux";
@@ -78,4 +78,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default memo(CartPage);

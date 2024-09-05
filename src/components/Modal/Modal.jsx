@@ -1,14 +1,18 @@
-import React from "react";
+import React, { memo, useState } from "react";
 import { Button, Checkbox, Form, Input, Modal as AntdModal } from "antd";
 import axios from "../../api";
 
 const Modal = ({ show, setShow }) => {
+  const [form] = Form.useForm();
   const handleRegister = (values) => {
+    const [value, setValue] = useState(values);
     axios
-      .post("/sign-up", values)
-      .then((res) => setShow(false))
+      .post("/sign-up", value)
+      .then((res) => {
+        setShow(false), setValue("");
+        form.resetFields();
+      })
       .catch((res) => console.log(res));
-    setShow(false);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -19,7 +23,10 @@ const Modal = ({ show, setShow }) => {
     <AntdModal
       title="User Information"
       visible={show}
-      onCancel={() => setShow(false)}
+      onCancel={() => {
+        setShow(false);
+        form.resetFields();
+      }}
       footer={null}
     >
       <Form
@@ -121,7 +128,7 @@ const Modal = ({ show, setShow }) => {
             span: 16,
           }}
         >
-          <Button type="primary" htmlType="submit">
+          <Button onClick={() => setValue("")} type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
@@ -130,4 +137,4 @@ const Modal = ({ show, setShow }) => {
   );
 };
 
-export default Modal;
+export default memo(Modal);

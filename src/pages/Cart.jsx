@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import CartPage from "../components/Cart";
 
 const Cart = () => {
@@ -9,4 +9,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default memo(Cart);

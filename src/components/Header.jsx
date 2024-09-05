@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import {
   FaShoppingCart,
   FaHeart,
@@ -6,13 +6,59 @@ import {
   FaSignOutAlt,
   FaMoon,
   FaSun,
+  FaPhoneAlt,
 } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { Dropdown } from "antd";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(true);
   const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile);
+
+  const items = [
+    {
+      key: "1",
+      label: (
+        <div className="flex items-center justify-center gap-3">
+          <img
+            src="https://via.placeholder.com/40"
+            alt="User Avatar"
+            className="w-7 h-7 rounded-full"
+          />
+          {profile?.fname}
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <div className="flex items-center justify-center">
+          @{profile?.username}
+        </div>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <div className="flex items-center justify-center">
+          <FaPhoneAlt /> {profile?.phone}
+        </div>
+      ),
+    },
+    {
+      key: "4",
+      label: (
+        <button
+          onClick={() => dispatch({ type: "LOGOUT" })}
+          className="text-red-500 flex items-center justify-center mx-auto"
+        >
+          <FaSignOutAlt size={16} /> Log Out
+        </button>
+      ),
+    },
+  ];
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
@@ -20,74 +66,34 @@ const Header = () => {
 
   return (
     <nav
-      className={`flex justify-between items-center p-4 ${
-        darkMode ? "bg-gray-900" : "bg-gray-100"
-      }`}
+      className={`p-4 ${
+        darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800"
+      } flex justify-between items-center`}
     >
-      <div
-        className={`text-2xl font-bold ${
-          darkMode ? "text-white" : "text-gray-900"
-        }`}
-      >
-        <a href="/">MyShop</a>
-      </div>
-      <div className="flex space-x-4">
-        <NavLink to={"/wishlist"}>
-          <button
-            className={`p-3 rounded-full shadow-lg transition transform hover:scale-110 ${
-              darkMode
-                ? "text-white bg-blue-500 hover:bg-blue-600"
-                : "text-gray-900 bg-blue-100 hover:bg-blue-200"
-            }`}
-          >
-            <FaHeart size={20} />
-          </button>
+      <NavLink to="/" className="text-xl font-semibold">
+        MyShop
+      </NavLink>
+      <div className="flex space-x-4 items-center">
+        <NavLink to="/wishlist" className="text-gray-500 hover:text-gray-700">
+          <FaHeart size={18} />
         </NavLink>
-        <NavLink to={"/cart"}>
-          <button
-            className={`p-3 rounded-full shadow-lg transition transform hover:scale-110 ${
-              darkMode
-                ? "text-white bg-green-500 hover:bg-green-600"
-                : "text-gray-900 bg-green-100 hover:bg-green-200"
-            }`}
-          >
-            <FaShoppingCart size={20} />
-          </button>
+        <NavLink to="/cart" className="text-gray-500 hover:text-gray-700">
+          <FaShoppingCart size={18} />
         </NavLink>
-        <button
-          className={`p-2 flex rounded-full shadow-lg transition transform hover:scale-110 ${
-            darkMode
-              ? "text-white bg-gray-600 hover:bg-gray-700"
-              : "text-gray-900 bg-gray-200 hover:bg-gray-300"
-          }`}
-        >
-          <FaUser size={20} />
-          Account
-        </button>
-        <button
-          onClick={() => dispatch({ type: "LOGOUT" })}
-          className={`p-2 flex rounded-full shadow-lg transition transform hover:scale-110 ${
-            darkMode
-              ? "text-white bg-red-500 hover:bg-red-600"
-              : "text-gray-900 bg-red-100 hover:bg-red-200"
-          }`}
-        >
-          <FaSignOutAlt size={20} />
-          LogOut
-        </button>
+        <Dropdown menu={{ items }} placement="bottomRight" arrow>
+          <button className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-200">
+            <FaUser size={18} />
+          </button>
+        </Dropdown>
         <button
           onClick={toggleTheme}
-          className={`p-3 rounded-full shadow-lg transition transform hover:scale-110 ${
-            darkMode
-              ? "text-white bg-yellow-500 hover:bg-yellow-600"
-              : "text-gray-900 bg-yellow-100 hover:bg-yellow-200"
-          }`}
+          className="p-1 rounded-full hover:bg-gray-200"
         >
-          {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
+          {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
         </button>
       </div>
     </nav>
   );
 };
 
-export default Header;
+export default memo(Header);
