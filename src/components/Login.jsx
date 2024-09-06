@@ -4,6 +4,7 @@ import axios from "../api";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "./Modal/Modal";
 import { useNavigate } from "react-router-dom";
+import { message, Space } from "antd";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -12,17 +13,25 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   console.log(token);
   const [show, setShow] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const onFinish = (values) => {
     setLoading(true);
     axios
       .post("/admins/sign-in", values)
       .then((res) => {
-        console.log(res.data.token);
+        if (res.status === 200) {
+          messageApi.success("Very Good");
+        }
+        console.log(res);
         dispatch({ type: "LOGIN", payload: res.data.payload.token });
+
         navigate("/");
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        messageApi.error("Something Went Wrong");
+      })
       .finally(() => setLoading(false));
   };
 
@@ -32,6 +41,7 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
+      {contextHolder}
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Login
