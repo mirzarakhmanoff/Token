@@ -28,7 +28,7 @@ const Products = () => {
       .then(() => {
         setShow(false);
         setReload((prev) => !prev);
-        form.resetFields(); // Clear the form after submission
+        form.resetFields();
       })
       .catch((err) => console.error("Error submitting data", err));
   };
